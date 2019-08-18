@@ -1,14 +1,3 @@
-"""
- deep Q network (DQN) reinforcement learning agent
- agent is using deep neural network and experience replay to learn Q(s, a) values
-
- parameters
- network_config_file_name - DQN neural network architecture
- epsilon_training - probability of choosing random action during training
- epsilon_testing  - probability of choosing random action during testing
- epsilon_decay - dacay of epsilon during training
-"""
-
 import numpy
 import random
 import math
@@ -17,51 +6,71 @@ import libs.libs_agent.agent as libs_agent
 from libs.libs_rysy_python.rysy import *
 
 
+
 #deep Q network agent
 class DQNAgent(libs_agent.Agent):
-    def __init__(self, env, network_config_file_name, gamma, replay_buffer_size, epsilon_training = 0.2, epsilon_testing = 0.01, epsilon_decay = 1.0):
-
+    def __init__(self, env):
         #init parent class
         libs_agent.Agent.__init__(self, env)
 
-        state_shape = Shape(self.env.get_width(), self.env.get_height(), self.env.get_depth())
+        self.gamma              = 0.99      #close to one, for long term goals
+        self.replay_buffer_size = 8192      #buffer size to break states correlations
+        self.epsilon_start      = 1.0       #starting epsilon value
+        self.epsilon_end        = 0.1       #final epsilon value
+        self.epsilon_decay      = 0.9999
 
-        #this is true magic of deep RL, deep Q network
-        self.deep_q_network = DQN(state_shape, self.env.get_actions_count(), gamma, replay_buffer_size, network_config_file_name)
 
-        self.deep_q_network._print()
+        #create CNN network, 3 convolutional layers, 2 full connected layers
 
-        #init probabilities of choosing random action
-        #different for training and testing
-        self.epsilon_training   = epsilon_training
-        self.epsilon_testing    = epsilon_testing
-        self.epsilon_decay      = epsilon_decay
+        #input with the some shape as state
+        state_shape   = Shape(self.env.get_width(), self.env.get_height(), self.env.get_depth())
 
-        self.state_vector = VectorFloat(self.env.get_size())
-        for i in range(0, self.state_vector.size()):
-            self.state_vector[i] = random.random()
+        #outputs count == actions_count
+        output_shape  = Shape(1, 1, self.env.get_actions_count())
 
-        self.zero_q_values_counter = 0
+        learning_rate = 0.001
+
+        self.cnn = CNN(state_shape, output_shape, learning_rate)
+
+        self.cnn.add_layer("convolution", Shape(3, 3, 16))
+        self.cnn.add_layer("elu")
+        self.cnn.add_layer("max pooling", Shape(2, 2))
+
+        self.cnn.add_layer("convolution", Shape(3, 3, 16))
+        self.cnn.add_layer("elu")
+        self.cnn.add_layer("max pooling", Shape(2, 2))
+
+        self.cnn.add_layer("convolution", Shape(3, 3, 32))
+        self.cnn.add_layer("elu")
+        self.cnn.add_layer("max pooling", Shape(2, 2))
+
+        self.cnn.add_layer("fc", Shape(64))
+        self.cnn.add_layer("elu")
+
+        self.cnn.add_layer("output")
+
+        self.cnn._print()
+
+        #empty replay buffer
+        self.replay_buffer = []
+
 
     def main(self):
 
         #choose correct epsilon - check if testing or training mode
         if self.is_run_best_enabled():
-            epsilon = self.epsilon_testing
+            epsilon = self.epsilon_end
         else:
-            epsilon = self.epsilon_training
-            if self.epsilon_training > self.epsilon_testing:
-                self.epsilon_training*= self.epsilon_decay
+            epsilon = self.epsilon_start
+            if self.epsilon_start > self.epsilon_end:
+                self.epsilon_start*= self.epsilon_decay
 
-        state = self.env.get_observation()
-        self.state_vector = VectorFloat(state)
+        state           = self.env.get_observation()
+        state_vector    = VectorFloat(state)    #convert to C++ vector
+        q_values        = VectorFloat(self.env.get_actions_count())
 
-
-        q_values = self.deep_q_network.forward(self.state_vector)
-
-        q_check_result = self.check_q_values(q_values)
-        if q_check_result != 0:
-            return q_check_result
+        #obtain Q-values from state
+        self.cnn.forward(q_values, state_vector)
 
         #select action using q_values from NN and epsilon
         self.action = self.select_action(q_values, epsilon)
@@ -72,51 +81,69 @@ class DQNAgent(libs_agent.Agent):
         #obtain reward
         self.reward = self.env.get_reward()
 
-        #add state, q_values and reward into experience replay
 
-        #if it is terminal state (game end) add it by calling add_final()
-        terminal = self.env.is_done()
-        self.deep_q_network.add(self.state_vector, q_values, self.action, self.reward, terminal)
-
-
-        #if experience replay is full process training - but only when agent in training mode
-        if self.deep_q_network.is_full() and self.is_run_best_enabled() == False:
-            self.deep_q_network.train()
-
-        return 0
-
-    """
-        save agent neural network into specified dir
-    """
-    def save(self, file_name_prefix):
-        self.deep_q_network.save(file_name_prefix)
-
-    """
-        load agent neural network from specified file
-    """
-    def load(self, file_name):
-        self.deep_q_network.load_weights(file_name)
-
-    def get_epsilon_training(self):
-        return self.epsilon_training
-
-
-    def check_q_values(self, q_values):
-        for i in range(0, len(q_values)):
-            if math.isnan(q_values[i]):
-                 return -1
-
-        zero_cnt = 0
-        for i in range(0, len(q_values)):
-            if q_values[i] == 0.0:
-                zero_cnt+= 1
-
-        if zero_cnt == len(q_values):
-            self.zero_q_values_counter+= 1
+        #add to experience replay buffer
+        #- state, q_values, reward, terminal state flag
+        if len(self.replay_buffer) < self.replay_buffer_size:
+            buffer_item  = {
+                "state"        : state_vector,
+                "q_values"     : q_values,
+                "action"       : self.action,
+                "reward"       : self.reward,
+                "terminal"     : self.env.is_done()
+            }
+            self.replay_buffer.append(buffer_item)
         else:
-            self.zero_q_values_counter = 0
+            #compute buffer Q values, using Q learning
+            for n in reversed(range(self.replay_buffer_size-1)):
 
-        if self.zero_q_values_counter > 1024:
-            return -2
+                #choose zero gamme if current state is terminal
+                if self.replay_buffer[n]["terminal"] == True:
+                    gamma = 0.0
+                else:
+                    gamma = self.gamma
 
-        return 0
+                action_id = self.replay_buffer[n]["action"]
+
+
+                #Q-learning : Q(s[n], a[n]) = R[n] + gamma*max(Q(s[n+1]))
+                q_next = max(self.replay_buffer[n+1]["q_values"])
+                self.replay_buffer[n]["q_values"][action_id] = self.replay_buffer[n]["reward"] + gamma*max(self.replay_buffer[n+1]["q_values"])
+
+                #clamp Q values into range <-10, 10> to prevent divergence
+                for action in range(self.env.get_actions_count()):
+                    self.replay_buffer[n]["q_values"][action] = self.__clamp(self.replay_buffer[n]["q_values"][action], -10.0, 10.0)
+
+            '''
+            common supervised training
+                we have in/out pairs :
+                    input         = self.replay_buffer[n]["state"]
+                    target output = self.replay_buffer[n]["q_values"]
+            '''
+
+            self.cnn.set_training_mode()
+
+            for i in range(self.replay_buffer_size):
+
+                #choose random item, to break correlations
+                idx = random.randint(0, self.replay_buffer_size - 1)
+
+                state = self.replay_buffer[idx]["state"]
+                target_q_values = self.replay_buffer[idx]["q_values"]
+
+                self.cnn.train(target_q_values, state)
+
+            self.cnn.unset_training_mode()
+
+            #clear buffer
+            self.replay_buffer = []
+
+
+    def __clamp(self, value, min, max):
+        if value < min:
+            value = min
+
+        if value > max:
+            value = max
+
+        return value
