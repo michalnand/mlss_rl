@@ -8,6 +8,7 @@ class Env:
         self.width  = 0
         self.height = 0
         self.depth  = 0
+        self.time   = 1
 
         self.player_on_move = 0
 
@@ -25,6 +26,9 @@ class Env:
 
     def get_depth(self):
         return self.depth
+
+    def get_time(self):
+        return self.time
 
     def get_size(self):
         return self.width*self.height*self.depth

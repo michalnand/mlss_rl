@@ -1960,6 +1960,9 @@ class CNN(_object):
     def load_weights(self, file_name_prefix):
         return _rysy.CNN_load_weights(self, file_name_prefix)
 
+    def get_layers_count(self):
+        return _rysy.CNN_get_layers_count(self)
+
     def get_layer_output_size(self):
         return _rysy.CNN_get_layer_output_size(self)
 
@@ -1968,6 +1971,9 @@ class CNN(_object):
 
     def get_layer_weights_flag(self, layer_idx):
         return _rysy.CNN_get_layer_weights_flag(self, layer_idx)
+
+    def get_layer_activation_flag(self, layer_idx):
+        return _rysy.CNN_get_layer_activation_flag(self, layer_idx)
 CNN_swigregister = _rysy.CNN_swigregister
 CNN_swigregister(CNN)
 
@@ -1999,8 +2005,8 @@ class RNN(_object):
     def train(self, *args):
         return _rysy.RNN_train(self, *args)
 
-    def train_from_error(self, nn_error):
-        return _rysy.RNN_train_from_error(self, nn_error)
+    def train_from_error(self, sequence_error):
+        return _rysy.RNN_train_from_error(self, sequence_error)
 
     def get_error_back(self):
         return _rysy.RNN_get_error_back(self)
@@ -2032,6 +2038,9 @@ class RNN(_object):
     def load_weights(self, file_name_prefix):
         return _rysy.RNN_load_weights(self, file_name_prefix)
 
+    def get_layers_count(self):
+        return _rysy.RNN_get_layers_count(self)
+
     def get_layer_output_size(self):
         return _rysy.RNN_get_layer_output_size(self)
 
@@ -2040,6 +2049,9 @@ class RNN(_object):
 
     def get_layer_weights_flag(self, layer_idx):
         return _rysy.RNN_get_layer_weights_flag(self, layer_idx)
+
+    def get_layer_activation_flag(self, layer_idx):
+        return _rysy.RNN_get_layer_activation_flag(self, layer_idx)
 RNN_swigregister = _rysy.RNN_swigregister
 RNN_swigregister(RNN)
 
@@ -2172,6 +2184,12 @@ class DQN(_object):
 
     def load_weights(self, file_name_prefix):
         return _rysy.DQN_load_weights(self, file_name_prefix)
+
+    def add_activity_map(self):
+        return _rysy.DQN_add_activity_map(self)
+
+    def save_activity_map(self, path):
+        return _rysy.DQN_save_activity_map(self, path)
 DQN_swigregister = _rysy.DQN_swigregister
 DQN_swigregister(DQN)
 
@@ -2319,8 +2337,8 @@ class DQNCuriosity(_object):
     __swig_destroy__ = _rysy.delete_DQNCuriosity
     __del__ = lambda self: None
 
-    def init(self, state_shape, actions_count, config_path):
-        return _rysy.DQNCuriosity_init(self, state_shape, actions_count, config_path)
+    def init(self, state_shape, actions_count, gamma, curiosity_ratio, replay_buffer_size, config_path):
+        return _rysy.DQNCuriosity_init(self, state_shape, actions_count, gamma, curiosity_ratio, replay_buffer_size, config_path)
 
     def forward(self, *args):
         return _rysy.DQNCuriosity_forward(self, *args)
@@ -2461,6 +2479,30 @@ class EmbeddedNetworkExport(_object):
         return _rysy.EmbeddedNetworkExport_process(self, export_path, network_prefix)
 EmbeddedNetworkExport_swigregister = _rysy.EmbeddedNetworkExport_swigregister
 EmbeddedNetworkExport_swigregister(EmbeddedNetworkExport)
+
+class NetworkActivity(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, NetworkActivity, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, NetworkActivity, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, cnn):
+        this = _rysy.new_NetworkActivity(cnn)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _rysy.delete_NetworkActivity
+    __del__ = lambda self: None
+
+    def add(self):
+        return _rysy.NetworkActivity_add(self)
+
+    def save(self, output_path):
+        return _rysy.NetworkActivity_save(self, output_path)
+NetworkActivity_swigregister = _rysy.NetworkActivity_swigregister
+NetworkActivity_swigregister(NetworkActivity)
 
 # This file is compatible with both classic and new-style classes.
 

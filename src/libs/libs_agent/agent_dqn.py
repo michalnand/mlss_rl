@@ -20,10 +20,18 @@ class DQNAgent(libs_agent.Agent):
         self.epsilon_decay      = 0.9999
 
 
+        #self.dqn_model_create()
+        self.dqn_rnn_model_create()
+
+        #empty replay buffer
+        self.replay_buffer = []
+
+    def dqn_model_create(self):
         #create CNN network, 3 convolutional layers, 2 full connected layers
 
         #input with the some shape as state
-        state_shape   = Shape(self.env.get_width(), self.env.get_height(), self.env.get_depth())
+        #depth is 4 stacked RGB frames
+        state_shape   = Shape(self.env.get_width(), self.env.get_height(), self.env.get_depth()*self.env.get_time())
 
         #outputs count == actions_count
         output_shape  = Shape(1, 1, self.env.get_actions_count())
@@ -44,6 +52,8 @@ class DQNAgent(libs_agent.Agent):
         self.cnn.add_layer("elu")
         self.cnn.add_layer("max pooling", Shape(2, 2))
 
+        self.cnn.add_layer("flatten")
+
         self.cnn.add_layer("fc", Shape(64))
         self.cnn.add_layer("elu")
 
@@ -51,9 +61,38 @@ class DQNAgent(libs_agent.Agent):
 
         self.cnn._print()
 
-        #empty replay buffer
-        self.replay_buffer = []
+    def dqn_rnn_model_create(self):
+        #create CNN + GRU network, 3 convolutional layers, one GRU recurrent layer and one full connected layer
 
+        #input with the some shape as state
+        #depth is 3 (RGB frame), time = 4 past frames
+        state_shape   = Shape(self.env.get_width(), self.env.get_height(), self.env.get_depth(), self.env.get_time())
+
+        #outputs count == actions_count
+        output_shape  = Shape(1, 1, self.env.get_actions_count())
+
+        learning_rate = 0.001
+
+        self.cnn = RNN(state_shape, output_shape, learning_rate)
+
+        self.cnn.add_layer("convolution", Shape(3, 3, 16))
+        self.cnn.add_layer("elu")
+        self.cnn.add_layer("max pooling", Shape(2, 2))
+
+        self.cnn.add_layer("convolution", Shape(3, 3, 16))
+        self.cnn.add_layer("elu")
+        self.cnn.add_layer("max pooling", Shape(2, 2))
+
+        self.cnn.add_layer("convolution", Shape(3, 3, 32))
+        self.cnn.add_layer("elu")
+        self.cnn.add_layer("max pooling", Shape(2, 2))
+
+        self.cnn.add_layer("flatten")
+        self.cnn.add_layer("gru", Shape(64))
+
+        self.cnn.add_layer("output")
+
+        self.cnn._print()
 
     def main(self):
 
@@ -114,6 +153,7 @@ class DQNAgent(libs_agent.Agent):
                 for action in range(self.env.get_actions_count()):
                     self.replay_buffer[n]["q_values"][action] = self.__clamp(self.replay_buffer[n]["q_values"][action], -10.0, 10.0)
 
+
             '''
             common supervised training
                 we have in/out pairs :
@@ -131,6 +171,7 @@ class DQNAgent(libs_agent.Agent):
                 state = self.replay_buffer[idx]["state"]
                 target_q_values = self.replay_buffer[idx]["q_values"]
 
+                #fit network
                 self.cnn.train(target_q_values, state)
 
             self.cnn.unset_training_mode()

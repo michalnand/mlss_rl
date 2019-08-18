@@ -21,7 +21,8 @@ class EnvAtariInterface(libs_env.Env):
         #dimensions
         self.width  = size
         self.height = size
-        self.depth  = self.colors_count*self.time_steps
+        self.depth  = self.colors_count
+        self.time   = self.time_steps
 
         #init state, as 1D vector (tensor with size depth*height*width)
         self.observation_init()
