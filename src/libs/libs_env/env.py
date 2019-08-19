@@ -31,7 +31,7 @@ class Env:
         return self.time
 
     def get_size(self):
-        return self.width*self.height*self.depth
+        return self.width*self.height*self.depth*self.time
 
     def get_observation(self):
         return self.observation

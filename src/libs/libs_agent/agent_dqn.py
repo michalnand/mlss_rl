@@ -53,7 +53,7 @@ class DQNAgent(libs_agent.Agent):
         self.cnn.add_layer("max pooling", Shape(2, 2))
 
         self.cnn.add_layer("flatten")
-
+        
         self.cnn.add_layer("fc", Shape(64))
         self.cnn.add_layer("elu")
 
@@ -88,6 +88,7 @@ class DQNAgent(libs_agent.Agent):
         self.cnn.add_layer("max pooling", Shape(2, 2))
 
         self.cnn.add_layer("flatten")
+
         self.cnn.add_layer("gru", Shape(64))
 
         self.cnn.add_layer("output")
