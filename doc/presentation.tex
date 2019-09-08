@@ -390,7 +390,7 @@ This naive NN doesn't works - solution DQN
 {\small
 \begin{itemize}
   \item {\color{red} \bf avoid} poor CNN, without FC layer, FC layer increase training speed, {\color{red} \bf avoid} global average pooling (GAP)
-  \item for {\color{green} \bf short time sequence} use frame stacking, for {\color{green} \bf long time sequence} time sequences use one LSTM (GRU) layer instead of FC
+  \item for {\color{green} \bf short time sequence} use frame stacking, for {\color{green} \bf long time sequence} use one LSTM (GRU) layer instead of FC
   \item {\color{green} \bf use} 3x3 kernels and deeper architecture
 \end{itemize}
 }
@@ -400,7 +400,7 @@ This naive NN doesn't works - solution DQN
     \begin{table}[]
     \begin{tabular}{|l|l|l|}
     \hline
-    \textbf{layer}       & \textbf{kernel size} & \textbf{output size} \\ \hline
+    \textbf{layer}       & \textbf{kernel shape} & \textbf{output shape} \\ \hline
     \rowcolor[HTML]{C0C0C0}
     \textbf{input}       & -                    & 48x48x(3x4)          \\ \hline
     \rowcolor[HTML]{FD6864}
@@ -499,11 +499,13 @@ if self.replay_buffer.is_full():
         #Q-learning : Q(s[n], a[n]) = R[n] + gamma*max(Q(s[n+1]))
         q_next = max(self.replay_buffer[n+1]["q_values"])
 
-        self.replay_buffer[n]["q_values"][action_id] = self.replay_buffer[n]["reward"] + gamma*max(self.replay_buffer[n+1]["q_values"])
+        self.replay_buffer[n]["q_values"][action_id] = self.replay_buffer[n]["reward"]
+        + gamma*max(self.replay_buffer[n+1]["q_values"])
 
         #clamp Q values into range <-10, 10> to prevent divergence
         for action in range(self.env.get_actions_count()):
-            self.replay_buffer[n]["q_values"][action] = self.__clamp(self.replay_buffer[n]["q_values"][action], -10.0, 10.0)
+            self.replay_buffer[n]["q_values"][action] =
+            self.__clamp(self.replay_buffer[n]["q_values"][action], -10.0, 10.0)
 \end{lstlisting}
 
 
