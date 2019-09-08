@@ -3,8 +3,8 @@
 {\bf we converted reinfrocement learning problem to supervised (regression) learning problem}
 
 \begin{itemize}
-    \item replay\_buffer[n]["state"]: network input
-    \item replay\_buffer[n]["q\_values"] : target values
+    \item network input : replay\_buffer[n]["state"]
+    \item target values : replay\_buffer[n]["q\_values"]
 \end{itemize}
 
 \lstset{language=python,

@@ -45,7 +45,7 @@
 
 
 
-\iftrue
+\iffalse
 
 \usetheme{Warsaw}
 
@@ -136,19 +136,25 @@
 \end{column}
 \begin{column}{0.5\textwidth}  %%<--- here
 
-      \begin{itemize}
-      \item {\bf playing Atari (2013)}
-      \item {\bf playing GO (2016)}
-      \item {\bf playing Doom (2018)}
-      \item {\bf playing StarCraft (2019)}
-      \item {\bf Stock market Agents, creating software, robotics}
+    \begin{itemize}
+        \item TD backgammon (1980s)
+        \item Q-learning (1989)
+        \item Reinfrocement learning (1990s)
     \end{itemize}
 
+    \begin{itemize}
+      \item playing Atari (2013)
+      \item playing GO (2016)
+      \item playing Doom (2018)
+      \item playing StarCraft (2019)
+    \end{itemize}
 
-    \begin{figure}[!htb]
-      \centering
-      \includegraphics[scale=0.09]{./diagrams/atari_network.png}
-    \end{figure}
+    \begin{itemize}
+      \item A3C, Curiosity learning
+      \item Non-differentiable learning
+      \item Random wired CNN
+      \item Attention networks
+    \end{itemize}
 
 \end{column}
 \end{columns}
@@ -174,9 +180,9 @@
 
 
 
-\begin{frame}{\bf What is $Q(s, a)$}
+\begin{frame}{\bf How to compute $Q(s, a)$ ?}
 
-Q-learning algorithm
+Q-learning algorithm (Watkins, 1989)
 
 $Q(s, a)$ value of action $a$, executed in state $s$
 
@@ -184,31 +190,26 @@ $Q(s, a)$ value of action $a$, executed in state $s$
 \begin{column}{0.5\textwidth}
 
   \begin{align*}
-  Q(s, a) = R + \gamma \max \limits_{\alpha'} Q(s', \alpha')
+  Q^*(s, a) &= R + \gamma \max \limits_{\alpha'} Q(s', \alpha') \\
+  Q^*(s(n), a(n)) &= R + \gamma \max \limits_{\alpha'} Q(s(n+1), \alpha')
   \end{align*}
 
 \end{column}
 \begin{column}{0.5\textwidth}  %%<--- here
-
-
   \begin{figure}[!htb]
     \centering
     \includegraphics[scale=0.2]{./diagrams/q_learning_detail.png}
   \end{figure}
-
 \end{column}
 \end{columns}
-
-
 
 where \\
 $s$ is state \\
 $a$ is action \\
 $s'$ is next state \\
-$a'$ is best action in next state \\
-$R(s, a)$ is reward \\
+$\max \limits_{\alpha'}$ is Q value of best action in next state \\
+$R$ is reward \\
 $\gamma \in \langle 0, 1 \rangle$ is discount factor \\
-
 
 \end{frame}
 
@@ -325,7 +326,8 @@ Approximate $Q(s, a)$ using deep neural network as $\hat{Q}(s, a; w)$, where $w$
 
 error to minimize
 \begin{align*}
-  E = \underset{\bf \color{green} target\ value}{R + \gamma \max \limits_{\alpha'} \hat{Q}(s', \alpha'; w)} - \underset{\bf \color{red} predicted\ value}{\hat{Q}(s, a; w) }
+  E &= \underset{\bf \color{green} target\ value}{R + \gamma \max \limits_{\alpha'} \hat{Q}(s', \alpha'; w)} - \underset{\bf \color{red} predicted\ value}{\hat{Q}(s, a; w) } \\
+  \mathcal{L}(w) &= (R + \gamma \max \limits_{\alpha'} \hat{Q}(s', \alpha'; w) - \hat{Q}(s, a; w))^2
 \end{align*}
 
 weights gradient
@@ -338,7 +340,7 @@ This naive NN doesn't works - solution DQN
 \end{frame}
 
 
-\begin{frame}{\bf Naive solutuion}
+\begin{frame}{\bf Naive solution}
 
 \begin{figure}
   \includegraphics[scale=0.25]{./diagrams/dqn_naive.png}
@@ -349,16 +351,14 @@ This naive NN doesn't works - solution DQN
 \begin{frame}{\bf Deep Q network - DQN}
 
 \begin{itemize}
-\item {\bf \color{red} correlated states} : \\
-    experience replay buffer\\
-\item {\bf \color{red} unstable training} : \\
-    non-stationary target value $\hat{Q}(s, a; w)$, depends on $w$, use temporary fixed weights w' \\
-\item {\bf \color{red} unknow gradients values} : \\
-    clip or normalise gradients into $\langle -1, 1 \rangle$
+\item {\bf \color{red} correlated states} : experience replay buffer \\
+\item {\bf \color{red} unstable training} : non-stationary target value $\hat{Q}(s, a; w)$, depends on $w$, use temporary fixed weights w' \\
+\item {\bf \color{red} unknow gradients values} : clip or normalise gradients and Q values
 \end{itemize}
 {\bf DQN equation}
 \begin{align*}
-  \hat{Q}(s, a; w) &= R + \gamma \max \limits_{\alpha'} \hat{Q}(s', \alpha'; w')
+  \hat{Q}(s, a; w) &= R + \gamma \max \limits_{\alpha'} \hat{Q}(s', \alpha'; w') \\
+  \mathcal{L}(w) &= (R + \gamma \max \limits_{\alpha'} \hat{Q}(s', \alpha'; w') - \hat{Q}(s, a; w))^2
   \label{eq:dqn}
 \end{align*}
 
@@ -385,12 +385,12 @@ This naive NN doesn't works - solution DQN
 
 
 \begin{frame}{\bf DQN best practices}
-\vspace{-5mm}
+\vspace{-4mm}
 
 {\small
 \begin{itemize}
   \item {\color{red} \bf avoid} poor CNN, without FC layer, FC layer increase training speed, {\color{red} \bf avoid} global average pooling (GAP)
-  \item for {\color{green} \bf short time sequence} use frame stacking, for {\color{green} \bf long time sequence} use one LSTM (GRU) layer instead of FC
+  \item for {\color{green} \bf short time sequence} use frame stacking, \\ for {\color{green} \bf long time sequence} use one LSTM (GRU) layer instead of FC
   \item {\color{green} \bf use} 3x3 kernels and deeper architecture
 \end{itemize}
 }
@@ -520,8 +520,8 @@ if self.replay_buffer.is_full():
 {\bf we converted reinfrocement learning problem to supervised (regression) learning problem}
 
 \begin{itemize}
-    \item replay\_buffer[n]["state"]: network input
-    \item replay\_buffer[n]["q\_values"] : target values
+    \item network input : replay\_buffer[n]["state"]
+    \item target values : replay\_buffer[n]["q\_values"]
 \end{itemize}
 
 \lstset{language=python,

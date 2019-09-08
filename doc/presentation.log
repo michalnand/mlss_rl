@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.5.5)  8 SEP 2019 14:28
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.5.5)  8 SEP 2019 17:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1308,10 +1308,6 @@ Package: ifdraft 2016/05/16 v1.4 Detect class options draft and final (HO)
 \@MXV@end=\dimen299
 \@MXV@textbox=\box70
 )
-(/usr/share/texlive/texmf-dist/tex/latex/beamer/beamerthemeWarsaw.sty
-(/usr/share/texlive/texmf-dist/tex/latex/beamer/beamerinnerthemerounded.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/beamer/beamercolorthemeorchid.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/beamer/beamercolorthemewhale.sty))
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `\color' on input line 77.
@@ -1570,75 +1566,73 @@ Overfull \vbox (90.73662pt too high) has occurred while \output is active []
 <./diagrams/arkanoid.png, id=28, 770.88pt x 800.9925pt>
 File: ./diagrams/arkanoid.png Graphic file (type png)
 <use ./diagrams/arkanoid.png>
-Package pdftex.def Info: ./diagrams/arkanoid.png  used on input line 156.
+Package pdftex.def Info: ./diagrams/arkanoid.png  used on input line 162.
 (pdftex.def)             Requested size: 115.627pt x 120.14369pt.
 <./diagrams/go_board.png, id=31, 803.0pt x 833.1125pt>
 File: ./diagrams/go_board.png Graphic file (type png)
 <use ./diagrams/go_board.png>
-Package pdftex.def Info: ./diagrams/go_board.png  used on input line 156.
+Package pdftex.def Info: ./diagrams/go_board.png  used on input line 162.
 (pdftex.def)             Requested size: 112.41924pt x 116.63495pt.
-<./diagrams/atari_network.png, id=34, 1965.744pt x 642.4pt>
-File: ./diagrams/atari_network.png Graphic file (type png)
-<use ./diagrams/atari_network.png>
-Package pdftex.def Info: ./diagrams/atari_network.png  used on input line 156.
-(pdftex.def)             Requested size: 176.90932pt x 57.81349pt.
 
-Overfull \hbox (23.26439pt too wide) in paragraph at lines 156--156
- [] 
- []
-
-
-Overfull \vbox (10.90337pt too high) detected at line 156
+Overfull \vbox (10.90337pt too high) detected at line 162
  []
 
 [2
 
- <./diagrams/arkanoid.png> <./diagrams/go_board.png> <./diagrams/atari_network.
-png (PNG copy)>]
-<./diagrams/rl_mechanism.png, id=46, 566.82353pt x 388.98265pt>
+ <./diagrams/arkanoid.png> <./diagrams/go_board.png>]
+<./diagrams/rl_mechanism.png, id=45, 566.82353pt x 388.98265pt>
 File: ./diagrams/rl_mechanism.png Graphic file (type png)
 <use ./diagrams/rl_mechanism.png>
-Package pdftex.def Info: ./diagrams/rl_mechanism.png  used on input line 173.
+Package pdftex.def Info: ./diagrams/rl_mechanism.png  used on input line 179.
 (pdftex.def)             Requested size: 170.04837pt x 116.69568pt.
  [3
 
  <./diagrams/rl_mechanism.png>]
-<./diagrams/q_learning_detail.png, id=57, 708.52942pt x 478.96588pt>
+Overfull \hbox (47.7476pt too wide) detected at line 214
+[]
+ []
+
+<./diagrams/q_learning_detail.png, id=55, 708.52942pt x 478.96588pt>
 File: ./diagrams/q_learning_detail.png Graphic file (type png)
 <use ./diagrams/q_learning_detail.png>
 Package pdftex.def Info: ./diagrams/q_learning_detail.png  used on input line 2
-13.
+14.
 (pdftex.def)             Requested size: 141.70337pt x 95.79147pt.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <14.4> on input line 213.
+(Font)              <14.4> on input line 214.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 213.
+(Font)              <10> on input line 214.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 213.
+(Font)              <7> on input line 214.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <14.4> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 213.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 214.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 213.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 214.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <7> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 213.
- [4
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 214.
+
+Overfull \vbox (1.4101pt too high) detected at line 214
+ []
+
+[4
 
  <./diagrams/q_learning_detail.png>]
-<./diagrams/cliff_diagram.png, id=71, 602.37045pt x 474.45255pt>
+<./diagrams/cliff_diagram.png, id=68, 602.37045pt x 474.45255pt>
 File: ./diagrams/cliff_diagram.png Graphic file (type png)
 <use ./diagrams/cliff_diagram.png>
-Package pdftex.def Info: ./diagrams/cliff_diagram.png  used on input line 265.
+Package pdftex.def Info: ./diagrams/cliff_diagram.png  used on input line 266.
 (pdftex.def)             Requested size: 120.47195pt x 94.88882pt.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 265.
+(Font)              <5> on input line 266.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <5> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 265.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 266.
  [5
 
  <./diagrams/cliff_diagram.png>]
 \openout4 = `presentation.vrb'.
 
- (./presentation.vrb
+
+(./presentation.vrb
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
@@ -1675,27 +1669,23 @@ Overfull \hbox (10.18741pt too wide) in paragraph at lines 36--38
 ] [7
 
 ]
-<./diagrams/dqn_naive.png, id=95, 1205.303pt x 640.794pt>
+<./diagrams/dqn_naive.png, id=92, 1205.303pt x 640.794pt>
 File: ./diagrams/dqn_naive.png Graphic file (type png)
 <use ./diagrams/dqn_naive.png>
-Package pdftex.def Info: ./diagrams/dqn_naive.png  used on input line 347.
+Package pdftex.def Info: ./diagrams/dqn_naive.png  used on input line 349.
 (pdftex.def)             Requested size: 301.32501pt x 160.1981pt.
  [8
 
  <./diagrams/dqn_naive.png>]
-<./diagrams/dqn.png, id=103, 576.1525pt x 501.875pt>
+<./diagrams/dqn.png, id=100, 576.1525pt x 501.875pt>
 File: ./diagrams/dqn.png Graphic file (type png)
 <use ./diagrams/dqn.png>
 Package pdftex.def Info: ./diagrams/dqn.png  used on input line 375.
 (pdftex.def)             Requested size: 92.18628pt x 80.30164pt.
-
-Overfull \vbox (4.43686pt too high) detected at line 375
- []
-
-[9
+ [9
 
  <./diagrams/dqn.png>]
-<./diagrams/dqn_replay_buffer.png, id=112, 2006.697pt x 1420.507pt>
+<./diagrams/dqn_replay_buffer.png, id=109, 2006.697pt x 1420.507pt>
 File: ./diagrams/dqn_replay_buffer.png Graphic file (type png)
 <use ./diagrams/dqn_replay_buffer.png>
 Package pdftex.def Info: ./diagrams/dqn_replay_buffer.png  used on input line 3
@@ -1704,7 +1694,7 @@ Package pdftex.def Info: ./diagrams/dqn_replay_buffer.png  used on input line 3
  [10
 
  <./diagrams/dqn_replay_buffer.png>]
-Overfull \vbox (7.77538pt too high) detected at line 435
+Overfull \vbox (10.62065pt too high) detected at line 435
  []
 
 [11
@@ -1731,7 +1721,7 @@ Overfull \hbox (21.66249pt too wide) in paragraph at lines 27--28
  (./presentation.vrb) [14
 
 ]
-<./pictures/me_rysy.jpg, id=146, 616.704pt x 462.528pt>
+<./pictures/me_rysy.jpg, id=143, 616.704pt x 462.528pt>
 File: ./pictures/me_rysy.jpg Graphic file (type jpg)
 <use ./pictures/me_rysy.jpg>
 Package pdftex.def Info: ./pictures/me_rysy.jpg  used on input line 570.
@@ -1777,10 +1767,10 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 24508 strings out of 492982
- 436476 string characters out of 6134897
- 707064 words of memory out of 5000000
- 27426 multiletter control sequences out of 15000+600000
+ 24421 strings out of 492982
+ 433522 string characters out of 6134897
+ 706215 words of memory out of 5000000
+ 27352 multiletter control sequences out of 15000+600000
  99443 words of font info for 80 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  56i,18n,80p,803b,1616s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1798,10 +1788,10 @@ are/texmf/fonts/type1/public/lm/lmsso8.pfb></usr/share/texmf/fonts/type1/public
 /lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy6.pfb></usr/share/te
 xmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmt
 k10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt8.pfb>
-Output written on presentation.pdf (15 pages, 6811704 bytes).
+Output written on presentation.pdf (15 pages, 6765609 bytes).
 PDF statistics:
- 220 PDF objects out of 1000 (max. 8388607)
- 158 compressed objects within 2 object streams
+ 217 PDF objects out of 1000 (max. 8388607)
+ 157 compressed objects within 2 object streams
  34 named destinations out of 1000 (max. 500000)
- 116 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 105 words of extra memory for PDF output out of 10000 (max. 10000000)
 
