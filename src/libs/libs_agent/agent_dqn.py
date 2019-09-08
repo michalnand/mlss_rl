@@ -20,8 +20,10 @@ class DQNAgent(libs_agent.Agent):
         self.epsilon_decay      = 0.9999
 
 
-        #self.dqn_model_create()
-        self.dqn_rnn_model_create()
+        self.model = self.dqn_model_create()
+        #self.model = self.dqn_rnn_model_create()
+
+        self.model._print()
 
         #empty replay buffer
         self.replay_buffer = []
@@ -38,28 +40,28 @@ class DQNAgent(libs_agent.Agent):
 
         learning_rate = 0.001
 
-        self.cnn = CNN(state_shape, output_shape, learning_rate)
+        model = CNN(state_shape, output_shape, learning_rate)
 
-        self.cnn.add_layer("convolution", Shape(3, 3, 16))
-        self.cnn.add_layer("elu")
-        self.cnn.add_layer("max pooling", Shape(2, 2))
+        model.add_layer("convolution", Shape(3, 3, 16))
+        model.add_layer("elu")
+        model.add_layer("max pooling", Shape(2, 2))
 
-        self.cnn.add_layer("convolution", Shape(3, 3, 16))
-        self.cnn.add_layer("elu")
-        self.cnn.add_layer("max pooling", Shape(2, 2))
+        model.add_layer("convolution", Shape(3, 3, 16))
+        model.add_layer("elu")
+        model.add_layer("max pooling", Shape(2, 2))
 
-        self.cnn.add_layer("convolution", Shape(3, 3, 32))
-        self.cnn.add_layer("elu")
-        self.cnn.add_layer("max pooling", Shape(2, 2))
+        model.add_layer("convolution", Shape(3, 3, 32))
+        model.add_layer("elu")
+        model.add_layer("max pooling", Shape(2, 2))
 
-        self.cnn.add_layer("flatten")
-        
-        self.cnn.add_layer("fc", Shape(64))
-        self.cnn.add_layer("elu")
+        model.add_layer("flatten")
 
-        self.cnn.add_layer("output")
+        model.add_layer("fc", Shape(64))
+        model.add_layer("elu")
 
-        self.cnn._print()
+        model.add_layer("output")
+
+        return model
 
     def dqn_rnn_model_create(self):
         #create CNN + GRU network, 3 convolutional layers, one GRU recurrent layer and one full connected layer
@@ -73,27 +75,29 @@ class DQNAgent(libs_agent.Agent):
 
         learning_rate = 0.001
 
-        self.cnn = RNN(state_shape, output_shape, learning_rate)
+        model = RNN(state_shape, output_shape, learning_rate)
 
-        self.cnn.add_layer("convolution", Shape(3, 3, 16))
-        self.cnn.add_layer("elu")
-        self.cnn.add_layer("max pooling", Shape(2, 2))
+        model.add_layer("convolution", Shape(3, 3, 16))
+        model.add_layer("elu")
+        model.add_layer("max pooling", Shape(2, 2))
 
-        self.cnn.add_layer("convolution", Shape(3, 3, 16))
-        self.cnn.add_layer("elu")
-        self.cnn.add_layer("max pooling", Shape(2, 2))
+        model.add_layer("convolution", Shape(3, 3, 16))
+        model.add_layer("elu")
+        model.add_layer("max pooling", Shape(2, 2))
 
-        self.cnn.add_layer("convolution", Shape(3, 3, 32))
-        self.cnn.add_layer("elu")
-        self.cnn.add_layer("max pooling", Shape(2, 2))
+        model.add_layer("convolution", Shape(3, 3, 32))
+        model.add_layer("elu")
+        model.add_layer("max pooling", Shape(2, 2))
 
-        self.cnn.add_layer("flatten")
+        model.add_layer("flatten")
 
-        self.cnn.add_layer("gru", Shape(64))
+        model.add_layer("gru", Shape(64))
 
-        self.cnn.add_layer("output")
+        model.add_layer("output")
 
-        self.cnn._print()
+        model._print()
+
+        return model
 
     def main(self):
 
@@ -110,7 +114,7 @@ class DQNAgent(libs_agent.Agent):
         q_values        = VectorFloat(self.env.get_actions_count())
 
         #obtain Q-values from state
-        self.cnn.forward(q_values, state_vector)
+        self.model.forward(q_values, state_vector)
 
         #select action using q_values from NN and epsilon
         self.action = self.select_action(q_values, epsilon)
@@ -162,7 +166,7 @@ class DQNAgent(libs_agent.Agent):
                     target output = self.replay_buffer[n]["q_values"]
             '''
 
-            self.cnn.set_training_mode()
+            self.model.set_training_mode()
 
             for i in range(self.replay_buffer_size):
 
@@ -173,9 +177,9 @@ class DQNAgent(libs_agent.Agent):
                 target_q_values = self.replay_buffer[idx]["q_values"]
 
                 #fit network
-                self.cnn.train(target_q_values, state)
+                self.model.train(target_q_values, state)
 
-            self.cnn.unset_training_mode()
+            self.model.unset_training_mode()
 
             #clear buffer
             self.replay_buffer = []

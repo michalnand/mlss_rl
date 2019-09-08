@@ -1,0 +1,41 @@
+\frametitle{\bf Training CNN}
+
+{\bf we converted reinfrocement learning problem to supervised (regression) learning problem}
+
+\begin{itemize}
+    \item replay\_buffer[n]["state"]: network input
+    \item replay\_buffer[n]["q\_values"] : target values
+\end{itemize}
+
+\lstset{language=python,
+                basicstyle=\tiny,
+                emph={self},
+                emphstyle={\color{blue}},
+                numberstyle=\color{green}\tiny,
+                keywordstyle=\color{red}\bf\ttfamily,
+                stringstyle=\color{red}\ttfamily,
+                commentstyle=\color{green}
+}
+
+\begin{lstlisting}
+
+self.cnn.set_training_mode()
+
+for i in range(self.replay_buffer_size):
+
+    #choose random item, to break correlations
+    idx = random.randint(0, self.replay_buffer_size - 1)
+
+    state = self.replay_buffer[idx]["state"]
+    target_q_values = self.replay_buffer[idx]["q_values"]
+
+    #fit network
+    self.cnn.train(target_q_values, state)
+
+self.cnn.unset_training_mode()
+
+#clear buffer
+self.replay_buffer = []
+
+\end{lstlisting}
+
